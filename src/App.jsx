@@ -2,12 +2,24 @@ import { useState } from "react";
 import NewProject from "./components/NewProject.jsx";
 import NoProjectSelected from "./components/NoProjectSelected.jsx";
 import ProjectSidebar from "./components/ProjectsSidebar.jsx";
+import SelectedProject from "./components/SelectedProject.jsx";
 
 function App() {
   const [projectsState, setProjectsState] = useState({
     selectedProjectId: undefined,
     projects: []
   });
+
+
+  function handleSelectProject(id) {
+    setProjectsState(prevState => {
+      return {
+        ...prevState,
+        selectedProjectId: id,
+      }
+    });
+  }
+
 
   function handleStartAddProject() {
     setProjectsState(prevState => {
@@ -19,11 +31,12 @@ function App() {
   }
 
 
+
   function handleAddProject(projectData) {
     const projectId = Math.random();
     setProjectsState(prevState => {
       const newProject = {
-        id: Math.random(),
+        id: projectId,
         ...projectData,
       };
       return {
@@ -43,8 +56,19 @@ function App() {
     });
   }
 
-  console.log(projectsState);
-  let content;
+  function handleDeleteProject() {
+    setProjectsState(prevState => {
+      return {
+        ...prevState,
+        selectedProjectId: undefined,
+        projects: projectsState.projects.filter(
+          (project) => project.id !== prevState.selectedProjectId),
+      }
+    });
+  }
+
+  const selectedProject = projectsState.projects.find(project => project.id === projectsState.selectedProjectId);
+  let content = <SelectedProject project={selectedProject} onDelete={handleDeleteProject} />;
 
 
   if (projectsState.selectedProjectId === null) {
@@ -57,7 +81,11 @@ function App() {
 
   return (
     <main className="h-screen my-8 flex gap-8">
-      <ProjectSidebar onStartAddProject={handleStartAddProject} projects={projectsState.projects} />
+      <ProjectSidebar
+        onStartAddProject={handleStartAddProject}
+        projects={projectsState.projects}
+        onSelectProject={handleSelectProject}
+      />
       {content}
     </main>
   );

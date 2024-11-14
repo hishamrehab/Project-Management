@@ -3,7 +3,7 @@ import Input from "./Input";
 import Modal from './Modal';
 
 export default function NewProject({ onAdd, onCancel }) {
-    const modal = useRef()
+    const modal = useRef();
     const title = useRef();
     const description = useRef();
     const dueDate = useRef();
@@ -13,12 +13,11 @@ export default function NewProject({ onAdd, onCancel }) {
         const enteredDescription = description.current.value;
         const enteredDueDate = dueDate.current.value;
 
-
+        // validation
         if (enteredTitle.trim() === '' || enteredDescription.trim() === '' || enteredDueDate === '') {
             // show the Error Modal 
             modal.current.open();
             return;
-
         }
 
         onAdd({
@@ -30,7 +29,7 @@ export default function NewProject({ onAdd, onCancel }) {
 
     return (
         <>
-            <Modal ref={modal} buttonCaption="okay">
+            <Modal ref={modal} buttonCaption="Okay">
                 <h2 className="text-xl font-bold text-stone-700 my-4">Invalid Input</h2>
                 <p className="text-stone-600 mb-4">Oops ... looks like you forgot to enter a value;</p>
                 <p className="text-stone-600 mb-4">Please make sure you provide a valid value for every input field</p>
@@ -48,7 +47,7 @@ export default function NewProject({ onAdd, onCancel }) {
                 <div>
                     <Input ref={title} label="Title" />
                     <Input ref={description} label="Description" textarea />
-                    <Input type="date" ref={dueDate} label="Due Date" />
+                    <Input ref={dueDate} type="date" label="Due Date" />
                 </div>
             </div>
         </>
